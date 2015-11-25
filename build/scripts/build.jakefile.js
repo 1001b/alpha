@@ -2,21 +2,37 @@
     "use strict";
 
     var version = require("../util/version_checker.js");
+    var jshint = require("simplebuild-jshint");
     var startTime = Date.now();
 
     desc("Lint and test");
     task("default", [ "version", "lint" ], function(){
         var elapsedSecs = (Date.now() - startTime) / 1000;
         console.log("\n\nBuild OK (" + elapsedSecs.toFixed(2) + "s)");
-    })
+    });
 
     //** LINT
     desc("Lint everything");
     task("lint", ["lintNode", "lintClient"]);
 
     task("lintNode", function(){
-       console.log("Linting Node.js code:");
-    });
+        process.stdout.write("Linting Node.js code:");
+        jshint.checkFiles({
+            files: ["build/**/*.js"],
+            options: {
+                node: true
+            },
+            globals: {
+                jake: false,
+                desc: false,
+                task: false,
+                directory: false,
+                complete: false,
+                fail: false
+            }
+        },complete,fail);
+
+    }, {async: true});
 
     task("lintClient",function(){
        console.log("Linting browser code:");
@@ -24,7 +40,7 @@
 
     //*** CHECK VERSION
 
-    desc("Check Node version")
+    desc("Check Node version");
     task("version", function() {
         console.log("Checking all versions:");
         version.check({
@@ -34,5 +50,5 @@
             strict: true
         }, complete,fail);
 
-    },{async: true})
+    },{async: true});
 }());

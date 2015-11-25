@@ -20,5 +20,5 @@
         function failWithQualifier(qualifier) {
             return fail("Incorrect " + options.name + " version.  Expected " + qualifier + " " + options.expected + ", but was " + options.actual + ".");
         }
-    }
+    };
 }());
