@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "jake": "~8.0.12"
+    "jake": "~8.0.12",
+    "semver": "~5.1.0"
+  },
+  "engines": {
+    "node": "0.10.25"
   }
 }
