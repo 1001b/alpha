@@ -6,7 +6,8 @@
     "jake": "~8.0.12",
     "semver": "~5.1.0",
     "jshint": "~2.9.1-rc1",
-    "simplebuild-jshint": "~1.1.0"
+    "simplebuild-jshint": "~1.1.0",
+    "object-merge": "~2.5.1"
   },
   "engines": {
     "node": "0.10.25"
