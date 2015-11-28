@@ -7,7 +7,11 @@
     "semver": "~5.1.0",
     "jshint": "~2.9.1-rc1",
     "simplebuild-jshint": "~1.1.0",
-    "object-merge": "~2.5.1"
+    "object-merge": "~2.5.1",
+    "expect": "~1.13.0",
+    "mocha": "~2.3.4",
+    "browserify": "~12.0.1",
+    "shelljs": "~0.5.3"
   },
   "engines": {
     "node": "0.10.25"
