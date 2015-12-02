@@ -6,15 +6,26 @@
     var browserify = require("../util/browserify_runner.js");
     var jshint = require("simplebuild-jshint");
     var jshintConfig = require("../config/jshint.config.js");
+    var karma = require("../util/karma_runner.js");
+    var mocha = require("../util/mocha_runner.js");
+    var nodeunit = require("../util/nodeunit_runner.js");
 
     var paths = require("../config/paths.js");
+    var browsers = require("../config/tested_browsers.js");
+
+    var strict = !process.env.loose;
 
     var startTime = Date.now();
+
+    var MOCHA_CONFIG = {
+        ui: "bdd",
+        reporter: "dot"
+    };
 
     //*General
 
     desc("Lint and test");
-    task("default", [ "version", "lint", "build" ], function(){
+    task("default", [ "version", "lint", "test" ], function(){
         var elapsedSecs = (Date.now() - startTime) / 1000;
         console.log("\n\nBuild OK (" + elapsedSecs.toFixed(2) + "s)");
     });
@@ -81,6 +92,48 @@
         shell.cp("-R", paths.serverDir, paths.serverEntryPoint, paths.distDir);
     });
 
+    //*** TEST
+
+    desc("Starat Karma Server --run this first");
+    task("karma", function(){
+        karma.serve(paths.karmaConfig, complete, fail);
+    },{async: true});
+
+    desc("Run tests");
+    task("test",["testServer","testClient","testSmoke"]);
+
+    task("testServer", [ paths.testDir ], function() {
+        process.stdout.write("Testing Node.js code: ");
+        mocha.runTests({
+            files: [ "src/server/**/_*_test.js" ],
+            options: MOCHA_CONFIG
+        }, complete, fail);
+    }, { async: true });
+
+    task("testClient", function() {
+        console.log("Testing browser code: ");
+        karma.runTests({
+            configFile: paths.karmaConfig,
+            browsers: browsers,
+            strict: strict
+        }, complete, fail);
+    }, { async: true });
+
+
+    task("testSmoke", [ "build", "testSmokeSimple", "testSmokeComplex" ]);
+
+    task("testSmokeSimple",function() {
+        process.stdout.write("Running local smoke tests: ");
+        mocha.runTests({
+            files: [ "src/_smoke_test.js" ],
+            options: MOCHA_CONFIG
+        }, complete, fail);
+    }, { async: true });
+
+
+    task("testSmokeComplex", function() {
+        nodeunit.runTests(["src/_smoke_test_phantom.js"], complete, fail);
+    }, {async: true});
 
 
 

@@ -5,6 +5,8 @@
 (function() {
     "use strict";
 
+    console.log("start node server......");
+
     var path = require("path");
     var server = require("./server/server.js");
 

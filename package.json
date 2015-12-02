@@ -16,7 +16,11 @@
     "karma-expect": "~1.1.1",
     "karma-browserify": "~4.4.1",
     "karma-commonjs": "0.0.13",
-    "karma-mocha": "~0.2.1"
+    "karma-mocha": "~0.2.1",
+    "expect.js": "~0.3.1",
+    "procfile": "~0.1.1",
+    "phantomjs": "~1.9.19",
+    "nodeunit": "~0.9.1"
   },
   "engines": {
     "node": "0.10.25"
