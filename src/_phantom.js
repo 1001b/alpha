@@ -25,7 +25,6 @@
             var error;
 
             error = inBrowserTest();
-            //if (!error) error = userInteractionTest();
 
             if (error) die(error);
             else phantom.exit(0);
@@ -38,6 +37,8 @@
     function inBrowserTest() {
 
         var msg;
+
+        //Must include the page javascript, otherwise remote debugging will not work
         page.includeJs(URL + "/" + bundleJS, page.evaluate(function() {
             try {
                 // Get the DOM elements
@@ -66,6 +67,7 @@
         }));
     }
 
+    //option of user interaction testing
     function userInteractionTest() {
         // Get validate button location
         var location = page.evaluate(function() {
