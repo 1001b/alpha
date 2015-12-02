@@ -2,7 +2,7 @@
     "use strict";
 
     var shell = require("shelljs");
-    var version = require("../util/version_checker.js");
+            var version = require("../util/version_checker.js");
     var browserify = require("../util/browserify_runner.js");
     var jshint = require("simplebuild-jshint");
     var jshintConfig = require("../config/jshint.config.js");

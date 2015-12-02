@@ -2,12 +2,14 @@
  Copyright (c) 2015 amihire. All rights reserved. See LICENSE.txt for details.
  Created by amihire on 2015.
  */
+
 /*global phantom, document, example,window */
 
 (function() {
     "use strict";
 
     var URL = "http://localhost:5000";
+    var bundleJS = "bundle.js";
 
     var page = require("webpage").create();
 
@@ -16,14 +18,14 @@
     };
 
     page.open(URL, function(success) {
-
+        //debugger;
         if (success !== "success") die("PhantomJS could not load " + URL);
 
         try {
             var error;
 
             error = inBrowserTest();
-            if (!error) error = userInteractionTest();
+            //if (!error) error = userInteractionTest();
 
             if (error) die(error);
             else phantom.exit(0);
@@ -34,7 +36,9 @@
     });
 
     function inBrowserTest() {
-        return page.evaluate(function() {
+
+        var msg;
+        page.includeJs(URL + "/" + bundleJS, page.evaluate(function() {
             try {
                 // Get the DOM elements
                 var textField = document.getElementById("text_field");
@@ -47,15 +51,19 @@
 
                 // Check the CSS class
                 var actual = textField.className;
-
                 var expected = example.REQUIRED_FIELD_CLASS;
-                if (actual !== expected) return "textField class expected " + expected + " but was " + actual;
-                else return null;
+
+                console.log("textField class expected " + expected + " and was " + actual)  ;
+
+                if (actual !== expected) {
+                    msg = "textField class expected " + expected + " but was " + actual;
+                }
+                else msg = null;
             }
             catch(err) {
-                return "Exception in PhantomJS browser code: " + err.stack;
+                msg = "Exception in PhantomJS browser code (IN): " + err.stack;
             }
-        });
+        }));
     }
 
     function userInteractionTest() {
@@ -70,7 +78,7 @@
                 };
             }
             catch(err) {
-                return "Exception in PhantomJS browser code: " + err.stack;
+                return "Exception in PhantomJS browser code (USER): " + err.stack;
             }
         });
 
